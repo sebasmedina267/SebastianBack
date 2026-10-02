@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://usuario:password@host:5432/database
+      DATABASE_URL: postgres://postgres:MGjN6tYqk3iL6qX4HCr9cS20uByDHId5pJQ9FavdxFAMgb3V9KY0cnsrLNfAxPiX@zqbxksyjw4y1yzlzbkfz97sz:5432/postgres
     ports:
       - '10000:3000'
 
