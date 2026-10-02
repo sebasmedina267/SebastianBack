@@ -30,7 +30,7 @@ const wss = new WebSocketServer({
 wss.on('connection', (ws) => {
   console.log('Cliente conectado vía WebSocket');
 
-  // ✔️ Enviar SIEMPRE JSON
+  // ✔ Enviar SIEMPRE JSON
   ws.send(JSON.stringify({
     type: "welcome",
     message: "WebSocket conectado"
@@ -39,7 +39,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     console.log('Mensaje recibido:', msg.toString());
 
-    // ✔️ Broadcast en JSON
+    // ✔ Broadcast en JSON
     wss.clients.forEach(client => {
       if (client.readyState === ws.OPEN) {
         client.send(JSON.stringify({
