@@ -9,7 +9,7 @@ const PORT = Number(process.env.PORT || 3000);
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-app.use('/api', apiRoutes);
+app.use(apiRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API del gimnasio funcionando' });
