@@ -3,7 +3,7 @@ version: '3.9'
 services:
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: prueba-sebastian-backend
     restart: unless-stopped
