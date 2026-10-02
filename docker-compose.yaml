@@ -13,3 +13,19 @@ services:
     ports:
       - '10000:3000'
 
+
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prueba-sebastian-backend
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://usuario:password@host:5432/database
+    ports:
+      - '10000:3000'
+
