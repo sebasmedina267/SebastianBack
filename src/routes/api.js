@@ -1,6 +1,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { buildDashboardData } = require('../services/dashboardService');
+const { broadcast } = require('../services/socketService');
 
 const router = express.Router();
 
@@ -149,7 +150,9 @@ router.post('/tasks', async (req, res) => {
       [title, 'Pendiente']
     );
 
-    return res.status(201).json(formatTaskRow(result.rows[0]));
+    const task = formatTaskRow(result.rows[0]);
+    broadcast('tasks:created', { task, collection: 'tasks' });
+    return res.status(201).json(task);
   } catch (error) {
     return res.status(500).json({ message: 'Error al crear la tarea', error: error.message });
   }
@@ -174,7 +177,9 @@ router.patch('/tasks/:id/toggle', async (req, res) => {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    return res.json(formatTaskRow(result.rows[0]));
+    const task = formatTaskRow(result.rows[0]);
+    broadcast('tasks:updated', { task, collection: 'tasks' });
+    return res.json(task);
   } catch (error) {
     return res.status(500).json({ message: 'Error al cambiar el estado de la tarea', error: error.message });
   }
@@ -193,6 +198,7 @@ router.delete('/tasks/:id', async (req, res) => {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
+    broadcast('tasks:deleted', { id: Number(req.params.id), collection: 'tasks' });
     return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ message: 'Error al eliminar la tarea', error: error.message });
@@ -227,7 +233,9 @@ router.post('/clients', async (req, res) => {
       [client.name || '', client.status || 'Activa', client.plan || null, client.lastVisit || null]
     );
 
-    return res.status(201).json(formatClientRow(result.rows[0]));
+    const clientData = formatClientRow(result.rows[0]);
+    broadcast('clients:created', { client: clientData, collection: 'clients' });
+    return res.status(201).json(clientData);
   } catch (error) {
     return res.status(500).json({ message: 'Error al crear el cliente', error: error.message });
   }
@@ -261,7 +269,9 @@ router.post('/sessions', async (req, res) => {
       [session.client || '', session.coach || null, session.date || null, session.time || null, session.status || 'Pendiente']
     );
 
-    return res.status(201).json(formatSessionRow(result.rows[0]));
+    const sessionData = formatSessionRow(result.rows[0]);
+    broadcast('sessions:created', { session: sessionData, collection: 'sessions' });
+    return res.status(201).json(sessionData);
   } catch (error) {
     return res.status(500).json({ message: 'Error al crear la sesión', error: error.message });
   }
